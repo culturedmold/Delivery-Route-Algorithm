@@ -11,8 +11,8 @@ class Hashmap:
 
         # update existing entry if exists
         for key_value_pair in bucket_elements:
+            print(key_value_pair)
             if key_value_pair[0] == key:
-                print(key_value_pair)
                 key_value_pair[1] = item
                 return
         
@@ -20,3 +20,18 @@ class Hashmap:
         key_value_pair = [key, item]
         bucket_elements.append(key_value_pair)
         return
+    
+    # return an item from the hashmap if it exists
+    def get_item(self, key):
+        bucket = hash(key) % len(self.list)
+        bucket_elements = self.list[bucket]
+
+        # check if key value pair exists in the bucket and return it
+        for key_value_pair in bucket_elements:
+            if key_value_pair[0] == key:
+                return key_value_pair[1]
+            
+        return None # if not found, return none
+
+    def get_size(self):
+        return len(self.list)
