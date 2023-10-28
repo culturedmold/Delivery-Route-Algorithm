@@ -1,3 +1,4 @@
+# truck
 class Truck:
     def __init__(self, packages, status, miles_traveled, hub_address, depart_time) -> None:
         # max 16 packages on truck - array of packages

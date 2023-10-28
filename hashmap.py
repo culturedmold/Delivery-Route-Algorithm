@@ -1,3 +1,5 @@
+# chaining hash table
 class Hashmap:
-    def __init__(self) -> None:
+    def __init__(self, packages) -> None:
         pass
+    

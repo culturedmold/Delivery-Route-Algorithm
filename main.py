@@ -26,6 +26,7 @@ def main():
         csv_reader = csv.reader(packages_csv, delimiter = ',')
         for row in csv_reader:
             
+            # temporary variables to ease initialization of package object from csv row
             ID = int(row[0])
             address = row[1]
             city = row[2]
