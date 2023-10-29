@@ -22,7 +22,7 @@ class Hashmap:
         return
     
     # return an item from the hashmap if it exists
-    def return_item(self, key):
+    def get_item(self, key):
         bucket = hash(key) % len(self.list)
         bucket_elements = self.list[bucket]
 

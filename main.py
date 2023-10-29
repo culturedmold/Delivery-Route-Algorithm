@@ -34,41 +34,57 @@ def create_pkg_hashmap(filename, pkg_hashmap):
             # load object into hashmap
             pkg_hashmap.insert(ID, new_package)
 
+# deliver packages
+def deliver_pkgs(truck):
+    delivery_queue = []
+    for pkg in truck.packages:
+        cur_pkg = pkg_hashmap.get_item(pkg)
+        cur_pkg.status = "enroute"
+        delivery_queue.append(cur_pkg)
+    
+    for pkg in delivery_queue:
+        print(pkg.status)
+
+    
 def main():
     # upon startup, ask user if they'd like to run the program or quit
-    command = input("Enter Q to quit, R to run program. ")
+    command = input("Welcome! Press any key to run the program, or enter Q to quit: ")
 
-    while command is not "Q":
-        # initialize trucks
-        # per business requirements, there are 3 trucks
-        for i in range(0, 3):
-            temp_truck = Truck([], None, None, None, None)
-            trucks.append(temp_truck)
+    while command != "Q":
+        if command != "R":
+            command = input("Not a valid command. Please enter R to run program, or Q to quit: ")
+        else:
+            # initialize trucks
+            # per business requirements, there are 3 trucks
+            for i in range(0, 3):
+                new_truck = Truck([], None, None, None, None)
+                trucks.append(new_truck)
 
-        # initialize drivers
-        # per business requirements, there are two drivers
-        for i in range(0, 2):
-            drivers.append(Driver(None))
+            # initialize drivers
+            # per business requirements, there are two drivers
+            for i in range(0, 2):
+                drivers.append(Driver(None))
 
-        # load the hashmap of packages (pkg_hashmap)
-        create_pkg_hashmap("/Users/tylerhampton/Desktop/WGU/wgu_c950/csv/packages.csv", pkg_hashmap)
-        print(pkg_hashmap.get_size())
+            # load the hashmap of packages (pkg_hashmap)
+            create_pkg_hashmap("/Users/tylerhampton/Desktop/WGU/wgu_c950/csv/packages.csv", pkg_hashmap)
+            print(pkg_hashmap.get_size())
 
-        print(pkg_hashmap.return_item(12))
+            print(pkg_hashmap.get_item(12))
 
-        # load the trucks
+            # load the trucks
 
-        trucks[0].packages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+            trucks[0].packages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 
-        print(trucks[0].packages)
+            deliver_pkgs(trucks[0])
 
-        print(pkg_hashmap.return_item(trucks[0].packages[7]))
+            # print(pkg_hashmap.return_item(trucks[0].packages[1]))
 
-        # request user input after running program to determine if they'd like to run again or quit
-        command = input("Enter Q to quit, R to run again. ")
-    
+            # request user input after running program to determine if they'd like to run again or quit
+            command = input("Enter Q to quit, R to run again. ")
+        
     print("Closing program.")
 
 
 if __name__ == "__main__":
     main()
+    
