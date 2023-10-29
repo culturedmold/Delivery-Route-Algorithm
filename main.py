@@ -1,5 +1,6 @@
 import datetime
 import csv
+from delivery_algorithm import deliver_pkgs
 from truck import Truck
 from package import Package
 from hashmap import Hashmap
@@ -34,17 +35,6 @@ def create_pkg_hashmap(filename, pkg_hashmap):
             # load object into hashmap
             pkg_hashmap.insert(ID, new_package)
 
-# deliver packages
-def deliver_pkgs(truck):
-    delivery_queue = []
-    for pkg in truck.packages:
-        cur_pkg = pkg_hashmap.get_item(pkg)
-        cur_pkg.status = "enroute"
-        delivery_queue.append(cur_pkg)
-    
-    for pkg in delivery_queue:
-        print(pkg.status)
-
     
 def main():
     # upon startup, ask user if they'd like to run the program or quit
@@ -75,7 +65,7 @@ def main():
 
             trucks[0].packages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 
-            deliver_pkgs(trucks[0])
+            deliver_pkgs(trucks[0], pkg_hashmap)
 
             # print(pkg_hashmap.return_item(trucks[0].packages[1]))
 
