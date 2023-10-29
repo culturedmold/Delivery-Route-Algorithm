@@ -50,7 +50,7 @@ def main():
     create_pkg_hashmap("/Users/tylerhampton/Desktop/WGU/wgu_c950/csv/packages.csv", pkg_hashmap)
     print(pkg_hashmap.get_size())
 
-    print(pkg_hashmap.get_item(22))
+    print(pkg_hashmap.return_item(12))
 
     # load the trucks
 
