@@ -10,6 +10,12 @@ class Address_Hashmap:
         # initialize address_hashmap
         self.address_hashmap = self.create_address_hashmap(self.distance_matrix)
 
+
+    # ADDRESSES AND DISTANCES
+    # addresses (vertices) and distances (edges) are separated into separate CSV files.
+    # CSV "rows" indicate which address belongs to which adjacent edges
+    # example: the value at distance_matrix[address x][address y] indicates the distance (edge weights) between the two addresses (vertices)
+
     # create a matrix of distances
     # returns a multidimensional array of distances
     def create_distances_matrix(self, filename_CSV):
