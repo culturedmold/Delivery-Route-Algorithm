@@ -3,13 +3,13 @@ from delivery_algorithm import deliver_pkgs
 from truck import Truck
 import hashmap
 from driver import Driver
-from delivery_graph import Address_Hashmap
+from delivery_graph import Address_Adj_Matrix
 
 drivers = []
 trucks = []
 packages = []
 pkg_hashmap = hashmap.Hashmap()
-addresses_hashmap = Address_Hashmap("csv/addresses.csv", "csv/distances.csv")
+address_adj_matrix = Address_Adj_Matrix("csv/addresses.csv", "csv/distances.csv")
 
 # main program and user interface
 def main():
@@ -44,9 +44,9 @@ def main():
 
             # look up the item in the hashmap and return it, then pass the propeties as needed into functions
             temp_pkg = pkg_hashmap.get_item(trucks[0].packages[1])
-            temp_pkg_2 = pkg_hashmap.get_item(trucks[0].packages[1])
+            temp_pkg_2 = pkg_hashmap.get_item(trucks[0].packages[4])
 
-            print(addresses_hashmap.get_distance_between(temp_pkg.address, temp_pkg_2.address))
+            print(address_adj_matrix.get_distance_between(temp_pkg.address, temp_pkg_2.address))
 
             # request user input after running program to determine if they'd like to run again or quit
             command = input("Enter Q to quit, R to run again: ")

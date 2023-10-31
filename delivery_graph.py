@@ -2,13 +2,13 @@ import csv
 
 # address hashmap
 # contains a hashmap of addresses : distances (an adjacenty matrix)
-class Address_Hashmap:
+class Address_Adj_Matrix:
     def __init__(self, addresses_CSV, distances_CSV):
         self.address_matrix = self.create_addresses_matrix(addresses_CSV)
         self.distance_matrix = self.create_distances_matrix(distances_CSV)
 
-        # initialize address_hashmap
-        self.address_hashmap = self.create_address_hashmap(self.distance_matrix)
+        # initialize.address_adj_matrix
+        self.address_adj_matrix = self.create_adj_matrix()
 
 
     # ADDRESSES AND DISTANCES
@@ -56,19 +56,21 @@ class Address_Hashmap:
                     graph[i][j] = graph[j][i]
 
     # create a hashmap of {address : distance}
-    # returns a hashmap/dict()
-    def create_address_hashmap(self, distances_matrix):
-        addresses_hashmap = dict()
-        for i in range(0, len(distances_matrix)):
-            addresses_hashmap[self.address_matrix[i][1]] = distances_matrix[i]
+    # returns a hashmap/j_matrix(self, distances_matrix):
+    def create_adj_matrix(self):
+        # matrix is stored as dictionary
+        # address is dictionary bucket, followed by all adjacent edges
+        address_adj_matrix = dict()
+        for i in range(0, len(self.distance_matrix)):
+            address_adj_matrix[self.address_matrix[i][1]] = self.distance_matrix[i]
         
-        return addresses_hashmap
+        return address_adj_matrix
     
-    # get address from address_hashmap
+    # get address from address_adj_matrix
     # returns the index of the key if it exists in the hashmap
     def get_address_index(self, address):
-        if address in self.address_hashmap.keys():
-            return list(self.address_hashmap).index(address)
+        if address in self.address_adj_matrix.keys():
+            return list(self.address_adj_matrix).index(address)
     
     # return distance between two addresses_list (vertices) and return the distances between them
     # uses the distance_matrix imported from CSV
