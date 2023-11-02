@@ -37,7 +37,7 @@ def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
 
         cur_pkg = next_location.address # next_location is used to set cur_pkg.address - this will be put into the get_distance_between method to find the distance between cur_package and the next package in unvisited_list
 
-        next_location.status = "delivered" # update pkg status after it's been "delivered"
+        next_location.status = "Delivered" # update pkg status after it's been "delivered"
             
         truck.cur_time += datetime.timedelta(hours = min_distance / truck.avg_speed) # update current time of the truck at the point of each delivery
 
@@ -48,4 +48,16 @@ def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
         truck.miles_traveled += min_distance # update distance traveled by the truck along the delivery route
 
     return
+
+# function will take a time input (provided by user in main function) and compare it against the departure time and delivery time of the packages determined by the delivery algorithm
+def get_status_by_time(package, timestamp):
+    pkg_status_at_time = None
+    if package.delivery_time <= timestamp: # if delivery_time is less than or equal to time parameter, then the package has been delivered
+        pkg_status_at_time = "Delivered"
+    elif package.departure_time < timestamp: # if the departure_time is less than the time passed as parameter, then the package is "Enroute". This case is only called if delivery_time !<= timestamp
+        pkg_status_at_time = "Enroute"
+    else: 
+        pkg_status_at_time = "At Hub"
+
+    return pkg_status_at_time
 
