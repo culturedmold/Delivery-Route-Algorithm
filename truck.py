@@ -1,6 +1,6 @@
 # truck
 class Truck:
-    def __init__(self, packages, status, departure_time, miles_traveled = float(0)) -> None:
+    def __init__(self, packages, status, departure_time = None, miles_traveled = float(0)) -> None:
         # max 16 packages on truck - array of packages
         # if more than 16 packages are in the truck, they will be removed
         self.packages = packages

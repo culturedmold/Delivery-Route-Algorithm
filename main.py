@@ -20,7 +20,7 @@ def main():
         else:
             trucks.append(Truck(None, None, datetime.timedelta(hours = 8)))
             trucks.append(Truck(None, None, datetime.timedelta(hours = 9, minutes = 5)))
-            trucks.append(Truck(None, None, datetime.timedelta(hours = 12)))
+            trucks.append(Truck(None, None, datetime.timedelta(hours = 12))) # after multiple simulations, it was determined that truck three should always be able to depart earlier than 12pm. An improvement would be to handle this aspect programatically and set the departure_time of the final truck to be the time of whatever previous truck returns to the hub first.
 
             # load the hashmap of packages (pkg_hashmap)
             hashmap.create_pkg_hashmap("csv/packages.csv", pkg_hashmap)
@@ -30,14 +30,21 @@ def main():
                 # if notes specify packages needed to go on a certain truck, those packages were loaded first
                 # if notes specify packages needed to be delivered together, those packages were grouped together
                 # remaining packages were loaded based on zip code - packages in the same zip code were loaded onto the same truck unless 
-            trucks[0].packages = [30,13,10,2,7,29,33,24,1,19,20,40,14,15,16,34]
-            trucks[1].packages = [3,8,27,35,39,5,37,38,25,6,12,17,31,36,22,18]
-            trucks[2].packages = [9,4,21,28,26,11,23,32]
+            trucks[0].packages = [30,13,10,2,7,29,33,24,1,19,20,40,14,15,16,34] # packages with early deadline by zip code
+            trucks[1].packages = [3,8,27,35,39,5,37,38,25,6,12,17,31,36,22,18] # late packages grouped by zip code; other packages with truck 2 requirement
+            trucks[2].packages = [9,4,21,28,26,11,23,32] # remaining no-deadline packages and packages with wrong addresses
 
-            # for truck in trucks:
-            #     run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix)
-            #     total_miles_traveled += truck.miles_traveled
-            run_delivery_algorithm(trucks, pkg_hashmap, address_adj_matrix)
+            run_delivery_algorithm(trucks[0], pkg_hashmap, address_adj_matrix)
+            run_delivery_algorithm(trucks[1], pkg_hashmap, address_adj_matrix)
+
+            # update address of package 9 before it departs from the hub
+            # address given to WGU at 10:20am, trucks[3] departs form the hub at 12pm
+            pkg_hashmap.get_item(trucks[2].packages[0]).address = "410 S State St"
+            pkg_hashmap.get_item(trucks[2].packages[0]).city = "Salt Lake City"
+            pkg_hashmap.get_item(trucks[2].packages[0]).state = "UT"
+            pkg_hashmap.get_item(trucks[2].packages[0]).zip = 84111
+
+            run_delivery_algorithm(trucks[2], pkg_hashmap, address_adj_matrix)
             
             total_miles_traveled = 0 # sum of miles traveled from all trucks
 
@@ -46,15 +53,12 @@ def main():
 
             print(total_miles_traveled)
 
-            check_deliveries = [37,25,6,31,30,13,29,1,20,40,14,15,16,34]
+            for pkg in trucks[2].packages:
 
-            for pkg in check_deliveries:
-
-                print(pkg_hashmap.get_item(pkg))
+                print(pkg_hashmap.get_item(pkg).delivery_time)
 
             # request user input after running program to determine if they'd like to run again or quit
             command = input("Enter Q to quit, R to run again: ")
-
 
     print("Closing program.")
 

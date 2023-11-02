@@ -24,6 +24,7 @@ class Address_Adj_Matrix:
             distances = csv.reader(distances_csv)
             distances = list(distances)
 
+            # requirements documentation outlines that the distance traveled between points is equal regardless of the direction, so we update the empty cells of the CSV accordingly
             for i in range(0, len(distances)):
                 for j in range(0, len(distances[i])):
                     if distances[i][j] == '':
