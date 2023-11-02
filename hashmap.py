@@ -14,7 +14,7 @@ class Hashmap:
 
         # update existing entry if exists
         for key_value_pair in bucket_elements:
-            print(key_value_pair)
+            # print(key_value_pair)
             if key_value_pair[0] == key:
                 key_value_pair[1] = item
                 return

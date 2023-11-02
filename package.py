@@ -2,7 +2,7 @@ import csv
 
 # package class
 class Package:
-    def __init__(self, ID, address, city, state, zip_code, deadline, weight, notes, status) -> None:
+    def __init__(self, ID, address, city, state, zip_code, deadline, weight, notes, status = "At Hub") -> None:
         # each ID must be unique
         self.ID = ID
 
@@ -29,6 +29,15 @@ class Package:
         # set departure_time and delivery_time as null initially
         self.departure_time = None
         self.delivery_time = None
+
+    # method will take a time input (provided by user in main function) and compare it against the departure time and delivery time of the packages
+    def get_status_by_time(self, time): 
+        if self.delivery_time <= time: # if delivery_time is less than or equal to time parameter, then the package has been delivered
+            self.status = "Delivered"
+        elif self.departure_time > time: # if the departure_time is greater than the time passed as parameter, then the package is "Entroute"
+            self.status = "Enroute"
+        else: 
+            self.status = "At Hub"
 
     def __str__(self) -> str:
         return "ID %s, Status %s, Address %s %s %s %s, Deadline %s, Weight %s, Notes %s, Status %s, Departure Time %s, Delivery Time %s" % (self.ID, self.status, self.address, self.city, self.state, self.zip_code, self.deadline, self.weight, self.notes, self.status, self.departure_time, self.delivery_time)

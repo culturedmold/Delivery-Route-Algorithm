@@ -1,44 +1,54 @@
+import datetime
+
 # delivery algorithm
-# Dijkstra's algorithm?
+# find optimal path using nearest neighbor approach
+# take truck, pkg_hashmap, address_adj_matrix as arguments
+def run_delivery_algorithm(trucks, pkg_hashmap, address_adj_matrix):
+    # algorithm will run on all trucks passed into the delivery algorithm
+    for truck in trucks:
+        unvisited_list = [] # initialize unvisited_list
+        
+        for pkg_ID in truck.packages: # all packages in list from truck are added to unvisited list
+            
+            pkg_hashmap.get_item(pkg_ID).status = "Enroute" # update package status to reflect current delivery status
+            pkg_hashmap.get_item(pkg_ID).departure_time = truck.departure_time # set package departure time to match departure time of the truck (when the package departed hub and status become "Enroute")
 
-class Vertex:
-    def __init__(self, v_address, vertices = []) -> None:
-        self.v_address = v_address
-        self.vertices = vertices
+            unvisited_list.append(pkg_hashmap.get_item(pkg_ID)) # use ID from truck packages list to get the corresponding package object from pkg_hashmap
 
-def deliver_pkgs(truck, pkg_hashmap):
-    delivery_queue = []
-    for pkg in truck.packages:
-        cur_pkg = pkg_hashmap.get_item(pkg)
-        cur_pkg.status = "enroute"
-        delivery_queue.append(cur_pkg)
+        # cur_pkg is set to hub initially
+        cur_pkg = address_adj_matrix.address_matrix[0][1]
+
+        # WHILE LOOP - run until unvisited_list is empty
+        while len(unvisited_list) > 0:
+            min_distance = float('inf')
+            next_location = None
+
+            # calculate distance between final package delivered and hub
+            # this will include travel distance back to hub after all packages have been delivered
+            # calculating the return distance to the hub is technically not a constraint imposed by the project requirements, but it doesn't make any logical sense to NOT calculate that distance unless the delivery business intends for the driver to take the truck home at the end of each day
+            if len(unvisited_list) == 1:
+                truck.miles_traveled += address_adj_matrix.get_distance_between(address_adj_matrix.address_matrix[0][1], unvisited_list[0].address)
+
+                print(address_adj_matrix.get_distance_between(address_adj_matrix.address_matrix[0][1], unvisited_list[0].address))
+
+            # FOR LOOP - iterate through all packages in unvisited list to find the package with the closest address to cur_pkg
+            for pkg in unvisited_list:
+                if address_adj_matrix.get_distance_between(pkg.address, cur_pkg) < min_distance:
+                    min_distance = address_adj_matrix.get_distance_between(pkg.address, cur_pkg) # set min_distance to the minimum distance of cur_pkg and pkg.address
+                    next_location = pkg
+
+            cur_pkg = next_location.address # next_location is used to set cur_pkg.address - this will be put into the get_distance_between method to find the distance between cur_package and the next package in unvisited_list
+
+            next_location.status = "delivered" # update pkg status after it's been "delivered"
+            
+            truck.cur_time += datetime.timedelta(hours = min_distance / truck.avg_speed) # update current time of the truck at the point of each delivery
+
+            next_location.delivery_time = truck.cur_time # update package delivery time to match the time the truck delivered the package
+
+            unvisited_list.remove(next_location) # when an item is removed from the unvisited list, it has been "delivered"
+
+            truck.miles_traveled += min_distance
+
     
-    for pkg in delivery_queue:
-        print(pkg.status)
+    return
 
-def deliver_pkgs_dijkstra(start_v):
-    # for each vertex cur_v in graph:
-        # cur_v.distance = infinity
-        # cur_v.pred_v = 0
-        # enqueue cur_v in unvisited_queue
-    
-    # while unvisited_queue not None:
-        # visit vertex with minimum distance from start_v
-        # cur_v  = dequeue_min univisited_queue
-
-        # for each vertex adj_v adjacent to cur_v:
-            # edge_weight = weight of edge from cur_v to adj_v
-            # alternate_path_distance = cur_v.distance + edge_weight
-
-            # if shorter path from start_v to adj_v is found, update adj_v.distance and predecessor
-            # if (alternate_path_distance < adj_v.distance):
-                # adj_v.distance = alternate_path_distance
-                # adj_v.pred_v = cur_v
-    
-    return None
-
-
-# find shortest path from hub to node a to all other nodes to find shortest point from a to next node in list. Next shortest node will be xfj
-# repeat until all are visisted
-
-# if 
