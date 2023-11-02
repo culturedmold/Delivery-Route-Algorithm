@@ -34,14 +34,13 @@ def main():
             trucks[1].packages = [3,8,27,35,39,5,37,38,25,6,12,17,31,36,22,18]
             trucks[2].packages = [9,4,21,28,26,11,23,32]
 
-
-            total_miles_traveled = 0
-
             # for truck in trucks:
             #     run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix)
             #     total_miles_traveled += truck.miles_traveled
             run_delivery_algorithm(trucks, pkg_hashmap, address_adj_matrix)
             
+            total_miles_traveled = 0 # sum of miles traveled from all trucks
+
             for truck in trucks:
                 total_miles_traveled += truck.miles_traveled
 

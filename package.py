@@ -27,14 +27,14 @@ class Package:
         self.status = status
 
         # set departure_time and delivery_time as null initially
-        self.departure_time = None
-        self.delivery_time = None
+        self.departure_time = None # will be updated by the truck when the truck leaves the hub per delivery algorithm
+        self.delivery_time = None # will be updated by the truck when the package is delivered per delivery algorithm
 
     # method will take a time input (provided by user in main function) and compare it against the departure time and delivery time of the packages
-    def get_status_by_time(self, time): 
-        if self.delivery_time <= time: # if delivery_time is less than or equal to time parameter, then the package has been delivered
+    def get_status_by_time(self, timestamp): 
+        if self.delivery_time <= timestamp: # if delivery_time is less than or equal to time parameter, then the package has been delivered
             self.status = "Delivered"
-        elif self.departure_time > time: # if the departure_time is greater than the time passed as parameter, then the package is "Entroute"
+        elif self.departure_time > timestamp: # if the departure_time is greater than the time passed as parameter, then the package is "Enroute". This case is only called if delivery_time !<= timestamp
             self.status = "Enroute"
         else: 
             self.status = "At Hub"
