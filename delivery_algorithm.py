@@ -50,14 +50,15 @@ def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
     return
 
 # function will take a time input (provided by user in main function) and compare it against the departure time and delivery time of the packages determined by the delivery algorithm
-def get_status_by_time(package, timestamp):
+def set_status_by_time(pkg, timestamp):
     pkg_status_at_time = None
-    if package.delivery_time <= timestamp: # if delivery_time is less than or equal to time parameter, then the package has been delivered
+    if pkg.delivery_time <= timestamp: # if delivery_time is less than or equal to time parameter, then the package has been delivered
         pkg_status_at_time = "Delivered"
-    elif package.departure_time < timestamp: # if the departure_time is less than the time passed as parameter, then the package is "Enroute". This case is only called if delivery_time !<= timestamp
+    elif pkg.departure_time < timestamp: # if the departure_time is less than the time passed as parameter, then the package is "Enroute". This case is only called if delivery_time !<= timestamp
         pkg_status_at_time = "Enroute"
     else: 
         pkg_status_at_time = "At Hub"
 
-    return pkg_status_at_time
+    pkg.status = pkg_status_at_time
+    return pkg.status
 

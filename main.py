@@ -12,9 +12,9 @@ address_adj_matrix = Address_Adj_Matrix("csv/addresses.csv", "csv/distances.csv"
 # main program and user interface
 def main():
     # initialize our array of trucks
-    trucks.append(Truck(None, None, datetime.timedelta(hours = 8))) # delivery can start at 8am. This truck does not contain any packages that arrive late or have other constraints beyond early delivery deadlines. 
-    trucks.append(Truck(None, None, datetime.timedelta(hours = 9, minutes = 5))) # this truck contains packages that arrive late, so it does not depart at 8am
-    trucks.append(Truck(None, None, datetime.timedelta(hours = 12))) # after multiple simulations, it was determined that truck three should always be able to depart earlier than 12pm. An improvement would be to handle this aspect programatically and set the departure_time of the final truck to be the time of whatever previous truck returns to the hub first.
+    trucks.append(Truck(1, None, datetime.timedelta(hours = 8))) # delivery can start at 8am. This truck does not contain any packages that arrive late or have other constraints beyond early delivery deadlines. 
+    trucks.append(Truck(2, None, datetime.timedelta(hours = 9, minutes = 5))) # this truck contains packages that arrive late, so it does not depart at 8am
+    trucks.append(Truck(3, None, datetime.timedelta(hours = 12))) # after multiple simulations, it was determined that truck three should always be able to depart earlier than 12pm. An improvement would be to handle this aspect programatically and set the departure_time of the final truck to be the time of whatever previous truck returns to the hub first.
 
     # load the hashmap of packages (pkg_hashmap)
     hashmap.create_pkg_hashmap("csv/packages.csv", pkg_hashmap)
@@ -50,30 +50,66 @@ def main():
         total_miles_traveled += truck.miles_traveled
 
     # MAIN USER INTERFACE
+    print("\n")
+    print("--------------------WGUPS DELIVERY SYSTEM--------------------\n")
     # upon startup, ask user if they'd like to run the program or quit
-    command = input("Welcome! Press any key to run the program, or enter Q to quit: ")
+    command = input("Welcome! Type any key and press 'Enter' to run the program, or enter Q to quit: ")
+    print("\n")
 
     # prompt user to run the program with "R" or quit with "Q"
     while command != "Q":
-        if command != "R":
-            command = input("Not a valid command. Please enter R to run program, or Q to quit: ")
-        else:
+            print("-----TOTAL MILES ACROSS ALL ROUTES: %s miles-----\n" % (total_miles_traveled))
 
-            print("Total Miles Traveled: %s miles" % (total_miles_traveled))
+            num_pkgs_command = input("Enter 1 to view status of a single package, 2 for all packages on a certain truck, 3 for all packages on all trucks: ")
 
-            timestamp_command = input("Please enter a time in Hours Minutes format: ")
+            print("Please enter a time of day (24 hour clock).")
+            hours_command = input("Hours: ")
+            minutes_command = input("Minutes: ")
 
-            for truck in trucks:
-                for pkg in truck.packages:
-                    # print("Package %s: %s" % (pkg, pkg_hashmap.get_item(pkg).get_status_by_time(datetime.timedelta(hours = 12, minutes = 15))))
-                    print("Package %s: %s" % (pkg, get_status_by_time(pkg_hashmap.get_item(pkg), datetime.timedelta(hours = 12, minutes = 15))))
-                    
+            user_timestamp = datetime.timedelta(hours = float(hours_command), minutes = float(minutes_command))
+
+            if num_pkgs_command == '1':
+                print("\n")
+                pkg_ID_command = input("Please enter a package ID: ")
+                pkg_to_display = pkg_hashmap.get_item(int(pkg_ID_command))
+                if pkg_to_display == None:
+                    print("Package not found.")
+                else:
+                    print("---------Package %s at %s----------" % (pkg_ID_command, user_timestamp))
+                    print(pkg_to_display.__str__())
+                    print("\n")
+
+            elif num_pkgs_command == '2':
+                print("\n")
+                truck_command = input("Please enter a truck (1-3): ")
+                print("\n")
+
+                if int(truck_command) > 3 or int(truck_command) < 1:
+                    print("Truck not found")
+                else:
+                    print("----------Status of all packages on truck %s at %s----------" % (truck_command, user_timestamp))
+                    print("\n")
+                    print("Miles traveled by truck %s: %s\n" % (truck_command, trucks[int(truck_command) - 1].miles_traveled))
+
+                    for pkg in trucks[int(truck_command) - 1].packages:
+                        pkg_to_display = pkg_hashmap.get_item(pkg)
+                        set_status_by_time(pkg_to_display, user_timestamp)
+                        print(pkg_to_display.__str__())
+                print("\n")
+
+            elif num_pkgs_command == '3':
+                for truck in trucks:
+                    print(truck.__str__())
+                    print("Status of packages on truck at time %s\n" % (user_timestamp))
+                    for pkg in truck.packages:
+                        pkg_to_display = pkg_hashmap.get_item(pkg)
+                        set_status_by_time(pkg_to_display, user_timestamp)
+                        print(pkg_to_display.__str__())
 
             # request user input after running program to determine if they'd like to run again or quit
             command = input("Enter Q to quit, R to run again: ")
 
-    print("Closing program.")
-
+    print("Closing program")
 
 if __name__ == "__main__":
     main()
