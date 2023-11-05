@@ -31,9 +31,14 @@ def main():
     trucks[1].packages = [3,8,27,35,39,5,37,38,25,6,12,17,31,36,22,18] # late packages grouped by zip code; other packages with truck 2 requirement
     trucks[2].packages = [9,4,21,28,26,11,23,32] # remaining no-deadline packages and packages with wrong addresses
 
+    # run function to find the optimal starting vertex for each truck route
+    # NEEDS MORE OPTIMIZATION TO ACCOUNT FOR DEADLINES, but works for now
+    optimal_start_v_truck1 = find_optimal_route(trucks[0], pkg_hashmap, address_adj_matrix)
+    optimal_start_v_truck2 = find_optimal_route(trucks[1], pkg_hashmap, address_adj_matrix)
+
     # run delivery algorithm on trucks[0] and trucks[1]
-    run_delivery_algorithm(trucks[0], pkg_hashmap, address_adj_matrix)
-    run_delivery_algorithm(trucks[1], pkg_hashmap, address_adj_matrix)
+    delivery_algorithm(trucks[0], pkg_hashmap, address_adj_matrix, optimal_start_v_truck1)
+    delivery_algorithm(trucks[1], pkg_hashmap, address_adj_matrix, optimal_start_v_truck2)
 
     # update address of package 9 before it departs from the hub
     # address given to WGU at 10:20am, trucks[2] departs form the hub at 12pm
@@ -44,7 +49,8 @@ def main():
     pkg_hashmap.get_item(trucks[2].packages[0]).zip = 84111
 
     # run delivery algorithm on trucks[2]
-    run_delivery_algorithm(trucks[2], pkg_hashmap, address_adj_matrix)
+    optimal_start_v_truck3 = find_optimal_route(trucks[2], pkg_hashmap, address_adj_matrix)
+    delivery_algorithm(trucks[2], pkg_hashmap, address_adj_matrix, optimal_start_v_truck3)
 
     # calculate total miles traveled for all trucks
     total_miles_traveled = 0 
@@ -61,7 +67,7 @@ def main():
 
     # prompt user to run the program with "R" or quit with "Q"
     while command != "Q":
-            print("-----TOTAL MILES ACROSS ALL ROUTES: %s miles-----\n" % (total_miles_traveled))
+            print("TOTAL MILES ACROSS ALL ROUTES: %s miles" % (total_miles_traveled))
 
             # display of menu to the user and get their command
             # allow user to view one package, packages on a certain truck, or all packages

@@ -31,6 +31,8 @@ class Package:
         self.delivery_time = None # will be updated by the truck when the package is delivered per delivery algorithm
 
     def __str__(self) -> str:
-        pkg_str = "----------Package ID: %s----------\nStatus: %s\nAddress: %s\nCity: %s\nState: %s\nZip: %s\nDeadline: %s\nWeight: %skg\nNotes: %s\nDeparture Time: %s\nActual Delivery Time: %s\n" % (self.ID, self.status, self.address, self.city, self.state, self.zip_code, self.deadline, self.weight, self.notes, self.departure_time, self.delivery_time)
+        # pkg_str = "----------Package ID: %s----------\nStatus: %s\nAddress: %s\nCity: %s\nState: %s\nZip: %s\nDeadline: %s\nWeight: %skg\nNotes: %s\nDeparture Time: %s\nActual Delivery Time: %s\n" % (self.ID, self.status, self.address, self.city, self.state, self.zip_code, self.deadline, self.weight, self.notes, self.departure_time, self.delivery_time)
+
+        pkg_str = "----------Package ID: %s----------\nStatus: %s, Address: %s, City: %s, State: %s, Zip: %s, Deadline: %s, Weight: %skg, Notes: %s, Departure Time: %s, Actual Delivery Time: %s\n" % (self.ID, self.status, self.address, self.city, self.state, self.zip_code, self.deadline, self.weight, self.notes, self.departure_time, self.delivery_time)
 
         return pkg_str

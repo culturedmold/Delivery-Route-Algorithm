@@ -1,5 +1,6 @@
 from package import Package
 import csv
+import datetime
 
 # CHAINING HASHMAP
 # The data structure implemented here uses key/value pairs to quickly lookup an item by it's "bucket."
@@ -33,6 +34,7 @@ class Hashmap:
         bucket_elements.append(key_value_pair)
         return
     
+    # LOOKUP FUNCTION
     # return an item from the hashmap if it exists
     def get_item(self, key):
         bucket = hash(key) % len(self.list)
@@ -67,6 +69,12 @@ class Hashmap:
                 weight = float(row[6])
                 notes = row[7]
                 status = "At Hub"
+
+                if deadline != "EOD":
+                    hours_mins = row[5].split(sep=":")
+
+                    deadline = datetime.timedelta(hours=float(hours_mins[0]), minutes = float(hours_mins[1]))
+                    print(str(deadline))
 
                 # package to load into hashmap
                 new_package = Package(ID, address, city, state, zip_code, deadline, weight, notes, status)

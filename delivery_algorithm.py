@@ -3,7 +3,10 @@ import datetime
 # delivery algorithm
 # find optimal path using nearest neighbor approach
 # take truck, pkg_hashmap, address_adj_matrix as arguments
-def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
+def delivery_algorithm(truck, pkg_hashmap, address_adj_matrix, starting_package):
+    truck.miles_traveled = float(0)
+    truck.cur_time = truck.departure_time
+
     unvisited_list = [] # initialize unvisited_list
         
     for pkg_ID in truck.packages: # all packages in list from truck are added to unvisited list
@@ -14,7 +17,13 @@ def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
         unvisited_list.append(pkg_hashmap.get_item(pkg_ID)) # use ID from truck packages list to get the corresponding package object from pkg_hashmap
 
     # cur_pkg is set to hub initially
-    cur_pkg = address_adj_matrix.address_matrix[0][1] # our starting hub
+    starting_package = pkg_hashmap.get_item(starting_package)
+    cur_pkg = starting_package.address
+
+    truck.miles_traveled += address_adj_matrix.get_distance_between(cur_pkg, address_adj_matrix.address_matrix[0][1])
+    truck.cur_time += datetime.timedelta(hours = truck.miles_traveled / 18)
+    starting_package.delivery_time = truck.cur_time
+    # unvisited_list.remove(starting_package)
 
     # WHILE LOOP - run until unvisited_list is empty
     while len(unvisited_list) > 0:
@@ -47,7 +56,7 @@ def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
 
         truck.miles_traveled += min_distance # update distance traveled by the truck along the delivery route
 
-    return
+    return truck.miles_traveled
 
 # function will take a time input (provided by user in main function) and compare it against the departure time and delivery time of the packages determined by the delivery algorithm
 def set_status_by_time(pkg, timestamp):
@@ -61,4 +70,48 @@ def set_status_by_time(pkg, timestamp):
 
     pkg.status = pkg_status_at_time
     return pkg.status
+
+# call this function to determine the most optimal route using our delivery algorithm
+# this function runs through all packages on a trucks route and uses our delivery algorithm defined elsewhere to determine the best possible starting address from the list of packages to be delivered on the truck
+def find_optimal_route(truck, pkg_hashmap, address_adj_matrix):
+
+    possible_route_starting_v_list = []
+    earliest_deadline = datetime.timedelta(hours=23, minutes=59)
+
+    first_package = None
+
+    for pkg in truck.packages:
+        if pkg_hashmap.get_item(pkg).deadline != "EOD":
+            # deliver the delayed packages first to ensure deadlines are met
+            # return the first found delayed package
+            if pkg_hashmap.get_item(pkg).notes == "Delayed on flight---will not arrive to depot until 9:05 am":
+                return pkg
+            
+            # get the earliest deadline of all packages
+            pkg_deadline = pkg_hashmap.get_item(pkg).deadline
+            if pkg_deadline < earliest_deadline:
+                earliest_deadline = pkg_deadline
+                print("Earliest Deadline:" + str(earliest_deadline))
+                first_package = pkg
+
+        else:
+            truck.cur_time = truck.departure_time
+            cur_mileage = delivery_algorithm(truck, pkg_hashmap, address_adj_matrix, pkg)
+            temp = [pkg, cur_mileage] 
+            possible_route_starting_v_list.append(temp)
+
+    # if we have identified a package with an early deadline, return that package as the package we need to start with for deliveries
+    if first_package is not None:
+        print(pkg_hashmap.get_item(first_package).deadline)
+        return first_package
+    
+    best_start = possible_route_starting_v_list[0][0]
+    smallest_dist = possible_route_starting_v_list[0][1]
+
+    for k in possible_route_starting_v_list:
+        if k[1] < smallest_dist:
+            best_start = k[0]
+            smallest_dist = k[1]
+    
+    return best_start
 
