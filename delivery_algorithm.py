@@ -14,7 +14,7 @@ def run_delivery_algorithm(truck, pkg_hashmap, address_adj_matrix):
         unvisited_list.append(pkg_hashmap.get_item(pkg_ID)) # use ID from truck packages list to get the corresponding package object from pkg_hashmap
 
     # cur_pkg is set to hub initially
-    cur_pkg = address_adj_matrix.address_matrix[0][1]
+    cur_pkg = address_adj_matrix.address_matrix[0][1] # our starting hub
 
     # WHILE LOOP - run until unvisited_list is empty
     while len(unvisited_list) > 0:
