@@ -3,6 +3,9 @@ import datetime
 # delivery algorithm
 # find optimal path using nearest neighbor approach
 # take truck, pkg_hashmap, address_adj_matrix as arguments
+
+# TIME COMPLEXITY
+# O(N^2)
 def delivery_algorithm(truck, pkg_hashmap, address_adj_matrix, starting_package):
     truck.miles_traveled = float(0)
     truck.cur_time = truck.departure_time
@@ -58,6 +61,8 @@ def delivery_algorithm(truck, pkg_hashmap, address_adj_matrix, starting_package)
 
     return truck.miles_traveled
 
+# TIME COMPLEXITY
+# O(1)
 # function will take a time input (provided by user in main function) and compare it against the departure time and delivery time of the packages determined by the delivery algorithm
 def set_status_by_time(pkg, timestamp):
     pkg_status_at_time = None
@@ -73,6 +78,8 @@ def set_status_by_time(pkg, timestamp):
 
 # call this function to determine the most optimal route using our delivery algorithm
 # this function runs through all packages on a trucks route and uses our delivery algorithm defined elsewhere to determine the best possible starting address from the list of packages to be delivered on the truck
+# TIME COMPLEXITY
+# O(N^3)
 def find_optimal_route(truck, pkg_hashmap, address_adj_matrix):
 
     possible_route_starting_v_list = []
@@ -91,7 +98,7 @@ def find_optimal_route(truck, pkg_hashmap, address_adj_matrix):
             pkg_deadline = pkg_hashmap.get_item(pkg).deadline
             if pkg_deadline < earliest_deadline:
                 earliest_deadline = pkg_deadline
-                print("Earliest Deadline:" + str(earliest_deadline))
+                # print("Earliest Deadline:" + str(earliest_deadline))
                 first_package = pkg
 
         else:
@@ -102,7 +109,7 @@ def find_optimal_route(truck, pkg_hashmap, address_adj_matrix):
 
     # if we have identified a package with an early deadline, return that package as the package we need to start with for deliveries
     if first_package is not None:
-        print(pkg_hashmap.get_item(first_package).deadline)
+        # print(pkg_hashmap.get_item(first_package).deadline)
         return first_package
     
     best_start = possible_route_starting_v_list[0][0]

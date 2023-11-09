@@ -74,7 +74,7 @@ class Hashmap:
                     hours_mins = row[5].split(sep=":")
 
                     deadline = datetime.timedelta(hours=float(hours_mins[0]), minutes = float(hours_mins[1]))
-                    print(str(deadline))
+                    # print(str(deadline))
 
                 # package to load into hashmap
                 new_package = Package(ID, address, city, state, zip_code, deadline, weight, notes, status)
