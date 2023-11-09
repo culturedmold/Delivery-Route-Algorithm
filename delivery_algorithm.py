@@ -13,6 +13,11 @@ def delivery_algorithm(truck, pkg_hashmap, address_adj_matrix, starting_package)
     unvisited_list = [] # initialize unvisited_list
         
     for pkg_ID in truck.packages: # all packages in list from truck are added to unvisited list
+        if truck.packages == []:
+            return None
+        elif pkg_hashmap.get_item(pkg_ID) == None:
+            return None
+            # raise TypeError("Package hashmap returned 'None'. Package ID not found in hashmap.")
             
         pkg_hashmap.get_item(pkg_ID).status = "Enroute" # update package status to reflect current delivery status
         pkg_hashmap.get_item(pkg_ID).departure_time = truck.departure_time # set package departure time to match departure time of the truck (when the package departed hub and status become "Enroute")
@@ -59,7 +64,7 @@ def delivery_algorithm(truck, pkg_hashmap, address_adj_matrix, starting_package)
 
         truck.miles_traveled += min_distance # update distance traveled by the truck along the delivery route
 
-    return truck.miles_traveled
+    return truck.packages
 
 # TIME COMPLEXITY
 # O(1)

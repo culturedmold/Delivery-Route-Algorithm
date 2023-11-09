@@ -72,12 +72,17 @@ class Address_Adj_Matrix:
     def get_address_index(self, address):
         if address in self.address_adj_matrix.keys():
             return list(self.address_adj_matrix).index(address)
+        else:
+            return None
     
     # return distance between two addresses_list (vertices) and return the distances between them
     # uses the distance_matrix imported from CSV
     def get_distance_between(self, address_1, address_2):
         x = self.get_address_index(address_1)
         y = self.get_address_index(address_2)
+
+        if (x == None or y == None):
+            return None
 
         distance = self.distance_matrix[x][y]
 
