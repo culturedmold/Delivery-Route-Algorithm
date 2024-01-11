@@ -7,10 +7,6 @@ import datetime
 # An item's "bucket" is determined by the item's "key" (in this case, the key is the package ID) modulo the length of the list of buckets.
 # The decision was made to set the initial length of the list of buckets to 16 due to 16 being the max capacity of a single truck. The create_pkg_hashmap method will resize the list of buckets after parsing the CSV if there any empty buckets leftover.
 
-# CITING SOURCE: C950 - Webinar-1 - Let’s Go Hashing
-# W-1_ChainingHashTable_zyBooks_Key-Value.py
-# Modifications made to improve readability of the code, among other things.
-
 class Hashmap:
     def __init__(self, initial_size = 16) -> None:
         # initial value 16 since that is the size of an empty truck
