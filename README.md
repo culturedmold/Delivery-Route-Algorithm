@@ -16,3 +16,5 @@ Our delivery algorithm operates on 3 trucks - this was an external requirement, 
 The algorithm utilizes a "greedy" approach. Taking a truck object, hashmap of package objects, address adjacency matrix, and a starting address, the algorithm runs through each package on the truck and uses a "nearest-neighbor" approach to determine the next best package to visit in order to minimize miles traveled. The package object is then updated with the delivery time and delivery status. Delivery time is simulated at an average truck speed of 18 miles per hour. Miles traveled for the truck object is updated. The truck is then rerouted back to the delivery hub after all it's packages have been delivered. 
 
 The delivery algorithm needed to deliver all packages within their deadlines, before EOD, and within 140 miles across two trucks. Our algorithm accomplishes all these requirements well within requirements by keeping miles traveled at 120 miles across all three trucks. 
+
+To run this program, download all files and run main.py in your IDE of choice or from the command line. 
